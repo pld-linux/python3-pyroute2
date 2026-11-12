@@ -5,13 +5,13 @@
 %define		module		pyroute2
 Summary:	Python Netlink library
 Name:		python3-%{module}
-Version:	0.9.6
+Version:	0.9.7
 Release:	1
 License:	GPLv2+ or Apache v2
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/pyroute2/
 Source0:	https://files.pythonhosted.org/packages/source/p/%{module}/%{module}-%{version}.tar.gz
-# Source0-md5:	a8c34ff9de89e55d5d50e9959937e56f
+# Source0-md5:	6d2b1eedc7f400d4bb411cce82cc15d0
 URL:		https://pyroute2.org/
 BuildRequires:	python3-build
 BuildRequires:	python3-installer
@@ -37,11 +37,13 @@ Python Netlink library.
 %py3_build_pyproject
 
 %if %{with tests}
+# test_frozen.py loads pyroute2-frozen.py, a git-only script missing from the sdist
 cd tests
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
 PYTEST_PLUGINS=pytest_asyncio \
 PYTHONPATH=$(pwd)/.. \
-%{__python3} -m pytest test_unit
+%{__python3} -m pytest test_unit \
+	--ignore=test_unit/test_frozen.py
 cd ..
 %endif
 
